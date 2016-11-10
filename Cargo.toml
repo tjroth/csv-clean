@@ -1,0 +1,8 @@
+[package]
+name = "rad-volume"
+version = "0.1.0"
+authors = ["Todd Roth <toddjroth@gmail.com>"]
+
+[dependencies]
+csv = "0.14.7"
+rustc-serialize = "*"
