@@ -6,3 +6,4 @@ authors = ["Todd Roth <toddjroth@gmail.com>"]
 [dependencies]
 csv = "0.14.7"
 rustc-serialize = "*"
+rusqlite = "0.7.3"

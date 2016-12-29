@@ -1,7 +1,9 @@
 extern crate csv;
 extern crate rustc_serialize;
+extern crate rusqlite;
 
 use csv::{Reader};
+use rusqlite::Connection;
 
 #[derive(RustcDecodable, Debug)]
 struct Record {
@@ -12,52 +14,34 @@ struct Record {
     site_code: String,
     reader: String
 }
-/*
-fn cleanRecord(r : Record) -> Record {
-let s = r.modality[..].trim();
-r = Record {modality: String::from(s), ..r};
-r
-}*/
-impl Record {
-    fn clean(&mut self) {
-        //modality
-        let m = self.modality.clone();
-        let trimmed = &m[..].trim();
-        self.modality = trimmed.to_string();
 
-        //site_code
-        let sc = self.site_code.clone();
-        let trimmed = &sc[..].trim();
-        self.site_code = trimmed.to_string();
-
-        //exam to_upper
-        let ex = self.exam.clone();
-        let trimmed = &ex[..].to_uppercase();
-        self.exam = trimmed.to_string();
-    }
-}
-
+//store the record in a database
 fn store_record(record: Vec<String>){
     println!("storing {:#?}", record);
 }
 
-fn clean_record(record : Vec<String>) -> Vec<String>{
-    fn cleaner (s: &String) -> String {
-        let cleaned = s.trim().to_uppercase();
-        cleaned.to_string()
+//Remove white space and uppercase string
+fn clean_string (s: &String) -> String {
+        s.trim().to_uppercase().to_string()
     }
-    record.iter().map(|x| cleaner(x)).collect::<Vec<_>>()
+
+//Cleans all strings int the vector.  See clean_string
+fn clean_record(record : Vec<String>) -> Vec<String>{
+    record.iter().map(|x| clean_string(x)).collect::<Vec<_>>()
 }
 
 fn main() {
-    println!("Parsing csv data...");
+    let conn = Connection::open_in_memory().unwrap();
+    println!("Parsing csv...");
     let file = "/Users/toddroth/Desktop/productivity.csv";
-    let mut rdr = Reader::from_file(file).unwrap().has_headers(true);   
+    let mut rdr = Reader::from_file(file).unwrap().has_headers(true);
+    let mut records = Vec::new();
     for row in rdr.decode() {
-        let mut rec :Vec<String> = row.unwrap(); 
+        let rec :Vec<String> = row.unwrap();
         let cr = clean_record(rec);
-        store_record(cr);
-    } 
+        records.push(cr);
+
+    }
+    println!("{:?}", records.len());
+    print!("{:?}", records[0]);
 }
-
-
