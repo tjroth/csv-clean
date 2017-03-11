@@ -1,0 +1,1 @@
+A simple command line utility to clean up csv files. It removes white space from beginning and end of string entries and capitalizes any strings.
