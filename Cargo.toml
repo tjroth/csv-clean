@@ -1,9 +1,9 @@
 [package]
-name = "rad-volume"
+name = "csvclean"
 version = "0.1.0"
 authors = ["Todd Roth <toddjroth@gmail.com>"]
 
 [dependencies]
-csv = "0.14.7"
+csv = "0.15.0"
 rustc-serialize = "*"
 rusqlite = "0.7.3"
